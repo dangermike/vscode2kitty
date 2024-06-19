@@ -26,11 +26,11 @@ type colorMapEntry struct {
 	Colors []colorEntry
 }
 
-var backgroundKey = "terminal.background"
+var backgroundEntries = []colorEntry{Entry("terminal.background"), Entry("editor.background")}
 
 var colorMap = []colorMapEntry{
 	{Key: "foreground", Colors: []colorEntry{Entry("terminal.foreground")}},
-	{Key: "background", Colors: []colorEntry{Entry(backgroundKey)}},
+	{Key: "background", Colors: backgroundEntries},
 	{Key: "selection_foreground", Colors: []colorEntry{Entry("terminal.selectionForeground"), Entry("terminal.selectionBackground", invert)}},
 	{Key: "selection_background", Colors: []colorEntry{Entry("terminal.selectionBackground")}},
 	{Key: "cursor", Colors: []colorEntry{Entry("terminalCursor.foreground")}},
@@ -71,7 +71,7 @@ func (t *VSCodeTheme) Color(ces ...colorEntry) (csscolorparser.Color, bool) {
 
 		if col.A < 1 {
 			// alpha blend with background
-			bg, _ := t.Color(Entry(backgroundKey))
+			bg, _ := t.Color(backgroundEntries...)
 			col.R = (col.R * col.A) + (bg.R * (1 - col.A))
 			col.G = (col.R * col.G) + (bg.G * (1 - col.A))
 			col.B = (col.R * col.B) + (bg.B * (1 - col.A))
